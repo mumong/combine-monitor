@@ -1,7 +1,7 @@
 # README.md
-- en [English](README.EN.md)
-- zh [Chinese](README.md)
-- jp [Japanses](README.JP.md)
+- [English](README.EN.md)
+- [Chinese](README.md)
+- [Japanses](README.JP.md)
 
 # 📦 combine-monitor
 
