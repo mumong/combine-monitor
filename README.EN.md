@@ -55,8 +55,8 @@ Record:
 ```
 ![image](https://github.com/user-attachments/assets/0221566f-9c6c-440c-b107-611817653acc)
 
-## ✅** Standard Query Format:：**
-`/queryservice?metric=<指标名>&duration=<时间范围>`
+## ✅**Standard Request Format:**
+`/queryservice?metric=<metric_name>&duration=<time_range>`
 
 ---
 ## 🛠️ Build & Deploy
