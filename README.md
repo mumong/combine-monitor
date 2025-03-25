@@ -1,20 +1,31 @@
-# combine-monitor
+# 📦 combine-monitor
 
+这是一个基于 **Prometheus + Telegraf + InfluxDB** 的个性化指标处理项目。  
+项目通过 **Telegraf 抓取 Prometheus 的监控数据**，在采集阶段进行 **处理与优化**，再写入 InfluxDB 中以供查询使用。
 
+最终封装为一个 **Pod 服务** 对外提供访问接口。  
+**⚠️ 注意：需要提前部署并配置好 Prometheus、InfluxDB 和 Telegraf。**
 
-这是一个基于prometheus，telegraf，influxdb的个性化处理监控指标的项目。
-项目是通过telegraf抓取 prometheus的数据并且在telegraf进行一些个性化的处理和优化进而将结果存储到influxdb中用于后续的数据抓取。
+---
 
+## 🧩 项目架构与流程
 
-整个项目可以封装为一个pod服务对外提供服务。需要提前部署好prometheus,influxdb。telegraf并且进行配置好。
+1. **Telegraf** 从 Prometheus 抓取指标数据；
+2. 在 Telegraf 内部通过插件进行部分字段裁剪、字段映射等个性化处理；
+3. 处理后的数据被写入 **InfluxDB**；
+4. 本项目中的服务（Pod）提供统一的接口，用于外部查询数据；
+5. 主逻辑通过 `/queryservice` 路由暴露，结合 `config` 下的配置文件，将用户请求转化为 InfluxDB 查询命令；
+6. 可查看 `telegraf.conf` 了解数据的采集与裁剪配置细节。
 
+---
 
-通过queryservice 路由进行主函数的访问，将访问的逻辑封装为接口方便后续的扩展。
-通过config下的配置文件与输入的请求命令拼接为一个infulxdb的查询命令，在对应的bucket中查询所需数据，可以查看考telegraf.conf中的配置里面具体的设置了如何将prometheus的数据存储到了influxdb并且进行一些裁剪处理。
+## 🌐 示例请求 & 查询效果
 
+服务部署后，可以通过如下方式访问：
 
-以下是一个直观的示例运行起来后如何查询以及效果。
+```bash
 curl "http://192.168.3.76:30077/queryservice?metric=node_memory_MemFree_bytes&duration=1m"
+
 Record:
   _stop: 2025-03-25 02:48:28.103879791 +0000 UTC
   _time: 2025-03-25 02:47:30 +0000 UTC
@@ -36,14 +47,17 @@ Record:
   result: _result
   table: 0
   _time: 2025-03-25 02:47:35 +0000 UTC
+```
+![image](https://github.com/user-attachments/assets/e3549762-c565-47d8-84db-0a8cc4b729d4)
 
+## ✅**标准请求格式：**
+`/queryservice?metric=<指标名>&duration=<时间范围>`
 
-只截取部分数据，标准格式为 curl + url/queryservice?metric=需要查询的指标&duration=时间
-----
-## 构建方式
-1. 执行`make docker` 构建编译镜像
-2. 执行`bash ./tools/upload.sh` 将docker镜像保存到containerd镜像仓库中
-3. 应用`deployment.yaml` 文件部署pod服务。
+---
+## 🛠️ 构建方式
+1. 执行`make docker` 编译构建镜像。
+2. 执行`bash ./tools/upload.sh` 将docker镜像上传到本地containerd仓库中
+3. 执行`kubectl apply -f deployment.yaml` 应用文件部署服务，需要配置对应的rbac确保硬件资源的发现。
 
 
 
