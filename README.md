@@ -1,3 +1,8 @@
+# README.md
+- en [English](README.EN.md)
+- zh [Chinese](README.md)
+- jp [Japanses](README.JP.md)
+
 # 📦 combine-monitor
 
 这是一个基于 **Prometheus + Telegraf + InfluxDB** 的个性化指标处理项目。  
