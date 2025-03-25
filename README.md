@@ -48,7 +48,7 @@ Record:
   table: 0
   _time: 2025-03-25 02:47:35 +0000 UTC
 ```
-![image](https://github.com/user-attachments/assets/e3549762-c565-47d8-84db-0a8cc4b729d4)
+![image](https://github.com/user-attachments/assets/0221566f-9c6c-440c-b107-611817653acc)
 
 ## ✅**标准请求格式：**
 `/queryservice?metric=<指标名>&duration=<时间范围>`
