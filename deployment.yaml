@@ -1,0 +1,43 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: query-wizard
+  namespace: xnet
+  labels:
+    app: query-wizard
+spec:
+  selector:
+    app: query-wizard
+  type: NodePort
+  ports:
+  - name: query-wizard
+    port: 8080
+    targetPort: 8080
+    nodePort: 30077
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: query-wizard
+  namespace: xnet
+  labels:
+    app: query-wizard
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: query-wizard
+  template:
+    metadata:
+      labels:
+        app: query-wizard
+    spec:
+      nodeSelector:
+        kubernetes.io/hostname: "master"  # 限制在 master 节点运行
+      containers:
+      - name: query-wizard
+        image: queryservice:v1.0
+        imagePullPolicy: Never  # 保证本地已有镜像，不从仓库拉取
+        ports:
+        - containerPort: 8080
+
